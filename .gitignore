@@ -1,0 +1,33 @@
+# Node.js
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos de entorno
+.env
+
+# MongoDB
+data/
+
+# # PostgreSQL
+# *.sql
+
+# Registros (logs)
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDEs y editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Pruebas
+coverage/
