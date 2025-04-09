@@ -1,4 +1,4 @@
-const ApiError = require('./../utils/apiError')
+import ApiError from './../utils/apiError.js'
 
 const validatorHandler = (schema, property) => {
     return (req, res, next) => {
@@ -11,4 +11,4 @@ const validatorHandler = (schema, property) => {
     }
 }
 
-module.exports = validatorHandler
+export default validatorHandler

@@ -9,4 +9,4 @@ const handlerError = (err, req, res, next) => {
     res.status(statusCode).json(message)
 }
 
-module.exports = handlerError
+export default handlerError
