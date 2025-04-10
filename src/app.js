@@ -1,28 +1,21 @@
 import express from "express";
+import helmet from "helmet";
 import { errorHandler } from "./middlewares/globalErrorHandler.js";
 import { AppError } from "./utils/appError.js";
+import productRouter from "./routes/productRouter.js";
 
 const app = express();
 
-console.log(process.env.NODE_ENV);
+// Middleware for security headers
+app.use(helmet());
 
 // Middleware for parsing JSON bodies
 app.use(express.json());
 
-// Middleware de logging (se ejecuta primero para todas las solicitudes)
+app.use("/api/v1/products", productRouter);
+
 app.use((req, res, next) => {
-  console.log(`${req.method} request for ${req.url}`);
-  next(); // Pasa al siguiente manejador
-});
-
-// Routes
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-// Test route for middleware error checking
-app.get("/test-error", (req, res) => {
-  throw new AppError("Test error", 400);
+  next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404));
 });
 
 app.use(errorHandler);
