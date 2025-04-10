@@ -8,6 +8,8 @@ import swaggerUi from 'swagger-ui-express'
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import morgan from 'morgan'
+import logger from './utils/logger.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,7 +17,12 @@ const __dirname = path.dirname(__filename);
 const swaggerPlain = await fs.readFile(path.join(__dirname, './utils/swagger.json'), 'utf-8')
 const swaggerDoc = JSON.parse(swaggerPlain)
 
+const stream = {
+    write: (message) => logger.info(message.trim())
+}
+
 app.use(express.json())
+app.use(morgan('combined', {stream}))
 
 connectDB()
 
