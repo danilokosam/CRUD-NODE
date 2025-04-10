@@ -1,61 +1,44 @@
 import { Product } from "../models/productModel.js";
+import { executeDbOperation } from "../utils/executeDbOperation.js";
 
 export const getAllProducts = async () => {
-  try {
-    const products = await Product.find().lean();
-    return products;
-  } catch (error) {
-    throw new Error("Error fetching products: " + error.message);
-  }
+  return executeDbOperation(
+    () => Product.find().lean(),
+    "Error fetching products"
+  );
 };
 
 export const getProductById = async (productId) => {
-  try {
-    const product = await Product.findById(productId);
-    return product;
-  } catch (error) {
-    throw new Error("Error fetching product: " + error.message);
-  }
+  return executeDbOperation(
+    () => Product.findById(productId),
+    "Error fetching product"
+  );
 };
 
 export const getProductByCode = async (productCode) => {
-  try {
-    const product = await Product.findOne({ productCode });
-    return product;
-  } catch (error) {
-    throw new Error("Error fetching product: " + error.message);
-  }
+  return executeDbOperation(
+    () => Product.findOne({ productCode }),
+    "Error fetching product"
+  );
 };
 
 export const createProduct = async (productData) => {
-  try {
-    const newProduct = await Product.create(productData);
-    return newProduct;
-  } catch (error) {
-    throw new Error("Error creating product: " + error.message);
-  }
+  return executeDbOperation(
+    () => Product.create(productData),
+    "Error creating product"
+  );
 };
 
 export const updateProduct = async (productId, productData) => {
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      productId,
-      productData,
-      {
-        new: true,
-      }
-    );
-    return updatedProduct;
-  } catch (error) {
-    throw new Error("Error updating product: " + error.message);
-  }
+  return executeDbOperation(
+    () => Product.findByIdAndUpdate(productId, productData, { new: true }),
+    "Error updating product"
+  );
 };
 
 export const deleteProduct = async (productId) => {
-  try {
-    const deletedProduct = await Product.findByIdAndDelete(productId);
-    return deletedProduct;
-  } catch (error) {
-    throw new Error("Error deleting product: " + error.message);
-  }
+  return executeDbOperation(
+    () => Product.findByIdAndDelete(productId),
+    "Error deleting product"
+  );
 };
