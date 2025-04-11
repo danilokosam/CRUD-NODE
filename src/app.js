@@ -3,8 +3,17 @@ import helmet from "helmet";
 import { errorHandler } from "./middlewares/globalErrorHandler.js";
 import { AppError } from "./utils/appError.js";
 import productRouter from "./routes/productRouter.js";
+import morgan from "morgan";
+import winston from "winston";
 
 const app = express();
+
+// Logger configuration using Winston
+const logger = winston.createLogger({
+  level: "info",
+  format: winston.format.json(),
+  transports: [new winston.transports.Console()],
+});
 
 // Middleware for security headers
 app.use(helmet());
