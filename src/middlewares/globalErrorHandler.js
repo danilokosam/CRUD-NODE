@@ -1,6 +1,6 @@
 import { AppError } from "../utils/appError.js";
 
-export const errorHandler = (err, req, res, next) => {
+export const errorHandler = (err, _req, res, _next) => {
   // Check if the error is an instance of AppError
   if (err instanceof AppError) {
     try {

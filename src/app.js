@@ -23,7 +23,7 @@ app.use(express.json());
 
 app.use("/api/v1/products", productRouter);
 
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404));
 });
 
