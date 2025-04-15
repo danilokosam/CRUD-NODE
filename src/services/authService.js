@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt'
 import userModel from './../models/userModel.js'
 import ApiError from '../utils/apiError.js'
 import config from '../config/config.js'
+import crypto from 'crypto'
+import nodemailer from 'nodemailer'
 
 class authService {
 
@@ -87,6 +89,68 @@ class authService {
         user.refreshToken = null
             await user.save()
         }
+    }
+
+    recoveryPassword = async (email) => {
+        const user = await userModel.findOne({ email })
+        if (!user) {
+            throw new ApiError('User does not exists', 404)
+        }
+        const resetToken = crypto.randomBytes(32).toString('hex')
+
+        const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+        user.resetPasswordToken = hashedToken
+        user.resetPasswordExpires = Date.now() + 1000 * 60 * 10
+        await user.save({ validateBeforeSave: false })
+
+        return resetToken
+    }
+
+    sendRecovery = async (email, token) => {
+        const link = `http://myFrontend.com/recovery?token=${token}`
+        const mail = {
+            from: config.emailApi,
+            to: email,
+            subject: 'Recuperacion de contrasena',
+            html: `<b>Ingresa a este link para recuperar tu contrasena: ${link}</b>`
+        }
+        const response = this.sendMail(mail)
+        return response
+    }
+
+    sendMail = async (mail) => {
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: config.emailApi,
+                pass: config.passEmail
+            }
+        })
+
+        await transporter.sendMail(mail)
+        return { message: 'mail sent' }
+    }
+
+    changePassword = async (token, newPassword) => {
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex')
+        const user = await userModel.findOne({
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { $gt: Date.now() }
+        })
+
+        if (!user) {
+            throw new ApiError('Expire your token', 400)
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10)
+        user.password = hashedPassword
+        user.resetPasswordExpires = undefined
+        user.resetPasswordToken = undefined
+        await user.save()
+
+        return { message: 'Password updated successfully' }
     }
 }
 

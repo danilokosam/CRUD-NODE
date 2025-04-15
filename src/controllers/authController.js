@@ -71,3 +71,25 @@ export const refreshToken = async (req, res, next) => {
         next(err)
     }
 }
+
+export const recoveryPassword = async (req, res, next) => {
+    try {
+        const { email } = req.body
+        const token = await Service.recoveryPassword(email)
+        await Service.sendRecovery(email, token)
+        res.status(200).json({ message: 'Mail sent succesfuly' })
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const changePassword = async (req, res, next) => {
+    try {
+        const { token } = req.params
+        const { newPassword } = req.body
+        const result = await Service.changePassword(token, newPassword)
+        res.status(200).json(result)
+    } catch (err) {
+        next(err)
+    }
+}
