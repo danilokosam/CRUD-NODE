@@ -41,4 +41,7 @@ const productSchema = new Schema(
   }
 );
 
+// Indexing for faster search
+productSchema.index({ name: 1 });
+
 export const Product = model("Product", productSchema);

@@ -34,3 +34,5 @@ Thumbs.db
 
 # Pruebas
 coverage/
+src/utils/adminPrueba.js
+src/utils/verifyHash.js

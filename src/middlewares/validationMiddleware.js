@@ -44,6 +44,25 @@ const validate = (schema) => {
   });
   // Return the middleware function to be used by Express
   return (req, res, next) => validateHandler(req, res, next);
+
+  /* 
+   Return the middleware function to be used by Express
+  return (req, res, next) => {
+     👇 Aquí agregamos lógica extra antes y después de validateHandler
+    console.log("🟡 Validando la solicitud...");
+
+     Llamamos a validateHandler y capturamos su resultado
+    validateHandler(req, res, (err) => {
+      if (err) {
+        console.error("🔴 Error en la validación:", err.message);
+        return next(err); // Pasa el error si hubo
+      }
+
+      console.log("🟢 Validación exitosa.");
+      next(); // Continúa al siguiente middleware
+    });
+  };
+  */
 };
 
 export default validate;
