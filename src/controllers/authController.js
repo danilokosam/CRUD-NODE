@@ -46,7 +46,7 @@ export const logout = async (req, res, next) => {
 export const getProfile = async (req, res, next) => {
     try {
         const { id } = req.user
-        const key = `cache:${id}:${req.originalUrl}`
+        const key = `cache:${id}:profile`
         const reply = await client.get(key)
         if (reply) {
             return res.json(JSON.parse(reply))
@@ -95,6 +95,7 @@ export const changePassword = async (req, res, next) => {
         const { token } = req.params
         const { newPassword } = req.body
         const result = await Service.changePassword(token, newPassword)
+        await client.del(`cache:${result.id}:profile`)
         res.status(200).json(result)
     } catch (err) {
         next(err)

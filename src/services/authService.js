@@ -150,7 +150,7 @@ class authService {
         user.resetPasswordToken = undefined
         await user.save()
 
-        return { message: 'Password updated successfully' }
+        return { message: 'Password updated successfully', id: user._id }
     }
 }
 
