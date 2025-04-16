@@ -10,7 +10,7 @@ export default router;
 // const connection = process.env.DB_CONNECTION
 
 router.get('/', (req, res) => {
-    connection.query('select * from db_crud_node.users;', (err, rows) => {
+    connection.query('select * from smed_technology.smed_registro;', (err, rows) => {
         if(err) {
             console.error('Error connecting to the database:', err);
             throw err
