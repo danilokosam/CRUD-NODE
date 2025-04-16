@@ -1,5 +1,6 @@
 import authService from '../services/authService.js'
 import config from '../config/config.js'
+import { client } from '../config/connection-cache.js'
 const Service = new authService()
 
 export const register = async (req, res, next) => {
@@ -45,8 +46,14 @@ export const logout = async (req, res, next) => {
 export const getProfile = async (req, res, next) => {
     try {
         const { id } = req.user
+        const key = `cache:${id}:${req.originalUrl}`
+        const reply = await client.get(key)
+        if (reply) {
+            return res.json(JSON.parse(reply))
+        }
         const user = await Service.getUser(id)
-        res.json(user)
+        await client.set(key, JSON.stringify(user), { EX: 60 * 5 })
+        return res.json(user)
     } catch (err) {
         next(err)
     }
