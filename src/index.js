@@ -14,6 +14,8 @@ import logger from './utils/logger.js'
 import cors from 'cors'
 import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
+import responseTime from 'response-time'
+import { connectRedis } from './config/connection-cache.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,11 +29,13 @@ const stream = {
 
 app.use(express.json())
 app.use(cookieParser())
+app.use(responseTime())
 app.use(cors())
 app.use(helmet())
 app.use(morgan('combined', {stream}))
 
 connectDB()
+connectRedis()
 
 app.use('/api/products', productRouter)
 app.use('/api', authRouter)

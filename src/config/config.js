@@ -8,7 +8,9 @@ const config = {
     jwtSecretRefresh: process.env.JWT_SECRET_REFRESH,
     nodeEnv: process.env.NODE_ENV,
     emailApi: process.env.EMAIL,
-    passEmail: process.env.EMAIL_PASSWORD
+    passEmail: process.env.EMAIL_PASSWORD,
+    redisHost: process.env.REDIS_HOST,
+    redisPort: process.env.REDIS_PORT
 }
 
 export default config
