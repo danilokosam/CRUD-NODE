@@ -6,6 +6,7 @@ import productRouter from "./routes/productRouter.js";
 import authRouter from "./routes/authRouter.js";
 import morgan from "morgan";
 import winston from "winston";
+import cors from "cors";
 
 const app = express();
 
@@ -15,6 +16,9 @@ const logger = winston.createLogger({
   format: winston.format.json(),
   transports: [new winston.transports.Console()],
 });
+
+// Middleware for CORS
+app.use(cors());
 
 // Middleware for security headers
 app.use(helmet());
